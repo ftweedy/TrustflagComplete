@@ -9,8 +9,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       user: {
-        email: "tweedyfrancis@gmail.com",
-        password: "testing"
+        email: "",
+        password: ""
       }
     }
   }
@@ -29,17 +29,19 @@ class App extends React.Component {
     })
   }
 
-  // handleEmailChange = event => {
-  //   const { user } = this.state;
-  //   user.email = event.target.value;
-  //   this.setState({ user: user });
-  // };
+  handleEmailChange = event => {
+    const { user } = this.state;
+    // console.log(user.email)
+    user.email = event.target.value;
+    this.setState({ user: user });
+  };
 
-  // handlePasswordChange = event => {
-  //   const { user } = this.state;
-  //   user.password = event.target.value;
-  //   this.setState({ user: user });
-  // };
+  handlePasswordChange = event => {
+    const { user } = this.state;
+    // console.log(user.password)
+    user.password = event.target.value;
+    this.setState({ user: user });
+  };
 
   render () {
     const { logged_in, sign_in_route, sign_out_route, sign_up_route} = this.props
@@ -53,9 +55,20 @@ class App extends React.Component {
         }
         {!logged_in &&
           <div>
-            <Button basic color='blue' onClick={() => this.handleUserLogin(this.state)}>
-              Log-In
-            </Button>
+            <Form inverted>
+              <Form.Field required={true} onChange={this.handleEmailChange}>
+                <label>E-Mail Address</label>
+                <input placeholder='Enter Your E-Mail Address' />
+              </Form.Field>
+              <Form.Field required={true} onChange={this.handlePasswordChange}>
+                <label>Password</label>
+                <input type='password' placeholder='Enter Your Password' />
+              </Form.Field>
+              <Button basic color='blue' onClick={() => this.handleUserLogin(this.state)}>
+                Log-In
+              </Button>
+            </Form>
+            
             <a href={sign_in_route}>Sign In</a>
             <a href={sign_up_route}>Sign Up</a>
           </div>

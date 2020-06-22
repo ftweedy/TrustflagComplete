@@ -1,8 +1,12 @@
 import React from "react"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types"
 import { Button, Header, Icon, Modal, Form } from 'semantic-ui-react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
+
+import Home from './Home'
 
 class App extends React.Component {
   constructor(props){
@@ -31,14 +35,12 @@ class App extends React.Component {
 
   handleEmailChange = event => {
     const { user } = this.state;
-    // console.log(user.email)
     user.email = event.target.value;
     this.setState({ user: user });
   };
 
   handlePasswordChange = event => {
     const { user } = this.state;
-    // console.log(user.password)
     user.password = event.target.value;
     this.setState({ user: user });
   };
@@ -50,6 +52,7 @@ class App extends React.Component {
       <React.Fragment>
         {logged_in &&
           <div>
+            < Home />
             <a href={sign_out_route}>Sign Out</a>
           </div>
         }
@@ -69,7 +72,6 @@ class App extends React.Component {
               </Button>
             </Form>
             
-            <a href={sign_in_route}>Sign In</a>
             <a href={sign_up_route}>Sign Up</a>
           </div>
         }

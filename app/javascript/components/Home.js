@@ -131,7 +131,7 @@ class Home extends React.Component {
     }
     
     fetchActiveFlags = () => {
-        fetch("/flags/user/" + USER_ID)
+        fetch("/flags/1")
             .then(response => {
                 return response.json();
             })

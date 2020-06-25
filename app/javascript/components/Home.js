@@ -167,9 +167,6 @@ class Home extends React.Component {
             <React.Fragment>
             <div>
                 <div className="row" style={styles.HEADER}>
-                    <div className="col-sm-2">
-                        <img alt="logo" src={logo} style={styles.LOGO}/>
-                    </div>
                     <div className="col-sm-2 col-sm-offset-6">
                         <div>My Account</div>
                     </div>

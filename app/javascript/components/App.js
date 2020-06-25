@@ -52,7 +52,13 @@ class App extends React.Component {
       <React.Fragment>
         {logged_in &&
           <div>
-            < Home />
+            <Router>
+              <Switch>
+                <Route exact path="/" component={Home} />
+                {/* <Route path="/home" component={Dashboard} /> */}
+                <Route path="/home" component={Home} />
+              </Switch>
+            </Router>
             <a href={sign_out_route}>Sign Out</a>
           </div>
         }

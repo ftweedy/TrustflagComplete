@@ -1,4 +1,4 @@
-class flagsController < ActionController::API
+class FlagsController < ActionController::API
     before_action :set_flag, only: [:show, :edit, :update, :destroy]
     def index
         flags = Flag.all.order("created_at DESC")

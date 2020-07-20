@@ -1,5 +1,5 @@
 import React from "react"
-import * as styles from './Home.style'
+import * as styles from './AppComponents/Home.style'
 
 class NoMatch extends React.Component {
   constructor(props){

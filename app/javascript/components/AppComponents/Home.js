@@ -3,14 +3,14 @@ import { Table, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
-import { Link } from "react-router-dom";
-import OwnedFlag from "./OwnedFlag";
+// import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import OwnedFlag from "../OwnedFlag";
 import * as styles from './Home.style'
 import FlagSearch from "./FlagSearch";
-import FlagDetails from "./FlagDetails";
-import Flag from "./Flag";
-import NoMatch from './NoMatch'
-import Maps from './Maps'
+import FlagDetails from "../FlagDetails";
+import Flag from "../Flag";
+import NoMatch from '../NoMatch'
+import Maps from '../Maps'
 
 const USER_ID = 1;
 
@@ -48,31 +48,35 @@ class Home extends React.Component {
 
     handleSearch = () => {
         const { name, location, licensePlateNumber, phoneNumber } = this.state
-        const params = []
-        let searchTerms = ""
-        if (name !== ""){
-            params.push(name)
-        }
-        if (location !== ""){
-            params.push(location)
-        }
-        if (licensePlateNumber !== ""){
-            params.push(licensePlateNumber)
-        }
-        if (phoneNumber !== ""){
-            params.push(phoneNumber)
-        }
+        const params = { name, location, licensePlateNumber, phoneNumber}
+        // const params = []
+        // let searchTerms = ""
+        // if (name !== ""){
+        //     params.push(name)
+        // }
+        // if (location !== ""){
+        //     params.push(location)
+        // }
+        // if (licensePlateNumber !== ""){
+        //     params.push(licensePlateNumber)
+        // }
+        // if (phoneNumber !== ""){
+        //     params.push(phoneNumber)
+        // }
 
-        for (let i = 0; i < params.length; i++){
-            params[i] = params[i].replace(/,/g,"");
-            searchTerms = searchTerms + params[i] + ","
-        }
+        // for (let i = 0; i < params.length; i++){
+        //     params[i] = params[i].replace(/,/g,"");
+        //     searchTerms = searchTerms + params[i] + ","
+        // }
 
-        if (searchTerms !== ""){
-            let url = new URL("http://localhost:8080/flags/search")//un-hardcode for live
-            url.searchParams.append("keywords", searchTerms)
-            fetch(url)
-                .then(response => {
+        // if (searchTerms !== ""){
+            // let url = new URL("http://localhost:8080/flags/search")//un-hardcode for live
+            // url.searchParams.append("keywords", searchTerms)
+        return fetch("/flags/search", {
+                body: JSON.stringify(params),
+                headers: {'Content-Type': 'application/json'},
+                method: "GET"
+            }).then(response => {
                     return response.json();
                 })
                 .then(flags => {
@@ -84,7 +88,7 @@ class Home extends React.Component {
                     }
                     this.setState(newState);
                 })
-        }
+        // }
     }
     
     handleCreate = () => {
@@ -131,7 +135,7 @@ class Home extends React.Component {
     }
     
     fetchActiveFlags = () => {
-        fetch("/flags/1")
+        fetch("/flags/search")
             .then(response => {
                 return response.json();
             })
@@ -144,8 +148,9 @@ class Home extends React.Component {
         this.fetchActiveFlags()
     }
 
-    render = () => {
+    render () {
         const {activeFlags, view, name, phoneNumber, licensePlateNumber, location, searchedFlags, lat, lng} = this.state;
+        const { sign_out_route } = this.props;
         const { SearchBar, ClearSearchButton } = Search;
         const columns = [
             {dataField: 'id', text: 'ID', sort: true}, 
@@ -166,69 +171,40 @@ class Home extends React.Component {
         return (
             <React.Fragment>
             <div>
-                <div className="row" style={styles.HEADER}>
-                    <div className="col-sm-2 col-sm-offset-6">
-                        <div>My Account</div>
+                <br/>
+                <div className="row">
+                    <div className="col-sm-3">
+                        Welcome back!
                     </div>
-                    <div className="col-sm-2">
-                        <Link to="/"><div style={{color: 'white'}}>Logout</div></Link>
+                    <div className="col-sm-offset-10">
+                        <Button onClick={this.toLogIncident}>Log Incident</Button>
                     </div>
                 </div>
-                <div className="row" style={{boxSizing: 'content-box'}}>
-                    <div className="col-sm-3">
-                        <div className="row">
-                            <Button onClick={this.toDashboard} block>Home</Button>
-                        </div>
-                        <div className="row">
-                            <Button onClick={this.toLogIncident} block>Log Incident</Button>
-                        </div>
-                        <div className="row">
-                            <Link to="/"><Button block>Logout</Button></Link>
-                        </div>
-                    </div>
-                    {view === 'dashboard' && 
-                        <div className="col-sm-7">
-                            <br/>
 
-                            <div className="row">
-                                <div className="col-sm-3">
-                                    Welcome back!
-                                </div>
-                                <div className="col-sm-offset-10">
-                                    <Button onClick={this.toLogIncident}>Log Incident</Button>
-                                </div>
-                            </div>
+                <br/>
 
-                            <br/>
-
-                            <ToolkitProvider 
-                                keyField="id" 
-                                data={ activeFlags } 
-                                columns={ columns }   
-                                search
-                            >
-                            {
-                                props => (
-                                <div>
-                                    <h3>Input something at below input field:</h3>
-                                    <SearchBar { ...props.searchProps } />
-                                    <ClearSearchButton { ...props.searchProps } />
-                                    <hr />
-                                    <BootstrapTable
-                                    { ...props.baseProps } 
-                                    selectRow={ selectRow }
-                                    />
-                                </div>)
-                            }
-                            </ToolkitProvider>
-                            <Maps lat={lat} lng={lng}/>
-                        </div>
+                <ToolkitProvider keyField="id" data={ activeFlags } columns={ columns } search>
+                    {
+                        props => (
+                        <div>
+                            <h3>Input something at below input field:</h3>
+                            <SearchBar { ...props.searchProps } />
+                            <ClearSearchButton { ...props.searchProps } />
+                            <hr />
+                            <BootstrapTable
+                            { ...props.baseProps } 
+                            selectRow={ selectRow }
+                            />
+                        </div>)
                     }
-                    {view === 'log' &&
+                </ToolkitProvider>
+                <Maps lat={lat} lng={lng}/>
+            </div>
+                    {/* {view === 'log' &&
                         <div className="col-sm-7">
                             <FlagSearch onChange={this.handleChange} onSearch={this.handleSearch}/>
                         </div>
-                    }
+                    } */}
                     {view === 'match' &&
                         <div className="col-sm-7">
                             <br/>
@@ -287,8 +263,6 @@ class Home extends React.Component {
                             <FlagSearch onChange={this.handleChange} onSearch={this.handleSearch}/>
                         </div>
                     }
-                </div>
-            </div>
             </React.Fragment>
         );
     }

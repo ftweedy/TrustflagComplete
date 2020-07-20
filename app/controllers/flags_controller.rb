@@ -8,9 +8,14 @@ class FlagsController < ActionController::API
       def show
         render json: flag
       end
+
+      def search
+        flags = current_user.flags
+        render json: flags
+      end
   
       def create
-        flag = current_user.flags.create(_params)
+        flag = current_user.flags.create(flag_params)
   
         if flag.save
           render json: flag

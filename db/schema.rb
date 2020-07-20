@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2020_06_12_000249) do
   enable_extension "plpgsql"
 
   create_table "flags", force: :cascade do |t|
+    t.integer "user_id"
     t.string "expiration_date"
     t.string "park_location"
     t.string "gps_coordinates"

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/flags/search', to: 'flags#search'
   resources :flags
   devise_for :users
 

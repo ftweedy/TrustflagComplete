@@ -50,6 +50,8 @@ class App extends React.Component {
     })
   }
 
+  ///users/sign_up
+
   handleEmailChange = event => {
     const { user } = this.state;
     user.email = event.target.value;
@@ -62,9 +64,36 @@ class App extends React.Component {
     this.setState({ user: user });
   };
 
+  handleContactChange = event => {
+    const { user } = this.state;
+    user.contact = event.target.value;
+    this.setState({ user: user });
+  };
+
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  handleSearch = () => {
+    const { name, location, licensePlateNumber, phoneNumber } = this.state
+    const params = { name, location, licensePlateNumber, phoneNumber}
+    return fetch("/flags/search", {
+            body: JSON.stringify(params),
+            headers: {'Content-Type': 'application/json'},
+            method: "GET"
+        }).then(response => {
+                return response.json();
+            })
+            .then(flags => {
+                const newState = {searchedFlags: flags};
+                if (flags.length === 0){
+                    newState.view = 'noMatch'
+                } else {
+                    newState.view = 'match'
+                }
+                this.setState(newState);
+            })
+  }
 
   render () {
     const { logged_in, sign_in_route, sign_out_route, sign_up_route} = this.props

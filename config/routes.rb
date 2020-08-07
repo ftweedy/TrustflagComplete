@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/flags/search', to: 'flags#search'
+  get '/flags/owned', to: 'flags#owned'
   resources :flags
   devise_for :users
 

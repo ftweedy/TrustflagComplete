@@ -13,6 +13,11 @@ class FlagsController < ActionController::API
         flags = current_user.flags
         render json: flags
       end
+
+      def owned
+        flags = current_user.flags
+        render json: flags
+      end
   
       def create
         flag = current_user.flags.create(flag_params)
